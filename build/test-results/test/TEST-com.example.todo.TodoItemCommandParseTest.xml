@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.todo.TodoItemCommandParseTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2021-01-16T15:37:50" hostname="MacBook-Pro.lan" time="0.058">
+  <properties/>
+  <testcase name="should parse command is add" classname="com.example.todo.TodoItemCommandParseTest" time="0.046"/>
+  <testcase name="should parse command is delete" classname="com.example.todo.TodoItemCommandParseTest" time="0.001"/>
+  <testcase name="should parse todo date" classname="com.example.todo.TodoItemCommandParseTest" time="0.005"/>
+  <testcase name="should get todo from commandLine" classname="com.example.todo.TodoItemCommandParseTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

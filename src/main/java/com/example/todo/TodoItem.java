@@ -15,7 +15,7 @@ public class TodoItem {
     private int index ;
 
     @JsonCreator
-    public TodoItem(@JsonProperty("operation") String operation, @JsonProperty("todoDate") String todoData, int index) {
+    public TodoItem(String operation, String todoData, int index) {
         this.operation = operation;
         this.todoData = todoData;
         this.doneState = false;

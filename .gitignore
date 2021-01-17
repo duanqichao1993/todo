@@ -29,6 +29,7 @@
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
+.gradle
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
@@ -107,3 +108,16 @@ fabric.properties
 .idea/codestream.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains
+.gradle/6.7/vcsMetadata-1/
+.idea/.name
+build/generated/
+build/reports/tests/test/classes/com.example.todo.FileRecordTest.html
+build/test-results/test/TEST-com.example.todo.FileRecordTest.xml
+build/classes/
+build/libs/
+build/reports/tests/test/css/
+build/reports/tests/test/index.html
+build/reports/tests/test/js/
+build/reports/tests/test/packages/
+build/test-results/test/binary/
+build/tmp/

@@ -17,13 +17,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 @Log
-public class FileOperation {
+public class TodoFile {
 
     private final File file;
     private final static int FIRST_INDEX = 1;
     private final  ObjectMapper objectMapper = new ObjectMapper();
 
-    public FileOperation(String path) {
+    public TodoFile(String path) {
         file = new File(path);
         if (!file.exists()) {
             try {
@@ -73,7 +73,7 @@ public class FileOperation {
         return todoItems.get(todoItems.size() - 1).index() + 1;
     }
 
-    public List<TodoItem> parseTodoFileTodoItem(String content)
+    private List<TodoItem> parseTodoFileTodoItem(String content)
             throws JsonProcessingException {
         if (StringUtils.isBlank(content)) {
             return Collections.emptyList();
@@ -106,12 +106,17 @@ public class FileOperation {
     public void doneTask(int taskIndex) throws IOException {
         String existContent = this.readFromFile();
         List<TodoItem> todoItems = this.parseTodoFileTodoItem(existContent);
-        for (TodoItem todoItem : todoItems) {
+        todoItems.forEach(todoItem -> {
             int index = todoItem.index();
             if (index == taskIndex) {
                 todoItem.done();
             }
-        }
+        });
         this.writeFile(todoItems);
+    }
+
+    public List<TodoItem> readTodoItems() throws IOException {
+        String fileContent = this.readFromFile();
+        return this.parseTodoFileTodoItem(fileContent);
     }
 }

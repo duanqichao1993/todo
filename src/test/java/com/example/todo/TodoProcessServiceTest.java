@@ -6,37 +6,37 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.List;
 
 class TodoProcessServiceTest {
 
-    private FileOperation fileOperation;
+    private TodoFile todoFile;
     private TodoProcessService todoProcessService;
 
     @BeforeEach
     public void setUp() {
-        this.fileOperation = new FileOperation("todo.txt");
+        this.todoFile = new TodoFile("todo.txt");
     }
 
     @Test
     @DisplayName("should save todo to file if command is add")
     public void should_save_todo_to_file_if_command_is_add() throws IOException {
-        int lastIndex = fileOperation.getLastIndex();
-        this.todoProcessService = new TodoProcessService(fileOperation);
+        int lastIndex = todoFile.getLastIndex();
+        this.todoProcessService = new TodoProcessService(todoFile);
         String reportMessage = todoProcessService.save(new TodoItem("add", "go home", lastIndex));
-        Assertions.assertEquals(1, fileOperation.todoSize());
+        Assertions.assertEquals(1, todoFile.todoSize());
         Assertions.assertEquals("Item <" + lastIndex + "> added", reportMessage);
-        fileOperation.delete();
+        todoFile.delete();
     }
 
     @Test
     @DisplayName("should done todo task if command is done")
     public void should_done_todo_task_if_command_is_done() {
-        fileOperation = new FileOperation("src/test/resources/todoNotDone.txt");
-        this.todoProcessService = new TodoProcessService(fileOperation);
+        todoFile = new TodoFile("src/test/resources/todoNotDone.txt");
+        this.todoProcessService = new TodoProcessService(todoFile);
         int index = 1;
         String doneMessage = todoProcessService.doneTask(index);
         Assertions.assertEquals("Item <" + index + "> done", doneMessage);
+        todoFile.delete();
     }
 
     @Test
@@ -57,12 +57,11 @@ class TodoProcessServiceTest {
                 "2.to swim\n" +
                 "Total: 2 ,1 item done";
         Assertions.assertEquals(message, taskInfo);
-
     }
 
     private void initTestFile() {
-        FileOperation fileOperation = new FileOperation("src/test/resources/todoListTest.txt");
-        this.todoProcessService = new TodoProcessService(fileOperation);
+        TodoFile todoFile = new TodoFile("src/test/resources/todoListTest.txt");
+        this.todoProcessService = new TodoProcessService(todoFile);
     }
 
 }

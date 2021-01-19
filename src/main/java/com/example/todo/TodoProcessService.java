@@ -1,5 +1,7 @@
 package com.example.todo;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,19 +9,19 @@ import java.util.stream.Collectors;
 public class TodoProcessService {
 
 
-    private final FileOperation fileOperation;
+    private final TodoFile todoFile;
 
-    public TodoProcessService(FileOperation fileOperation) {
+    public TodoProcessService(TodoFile todoFile) {
 
-        this.fileOperation = fileOperation;
+        this.todoFile = todoFile;
     }
 
     public String save(TodoItem todoItem) throws IOException {
-        fileOperation.addItemToFile(todoItem);
+        todoFile.addItemToFile(todoItem);
         return this.report(todoItem, todoItem.operation());
     }
 
-    public String report(TodoItem todoItem, String operation) {
+    private String report(TodoItem todoItem, String operation) {
         String action = "";
         if ("add".equals(operation)) {
             action = "added";
@@ -30,14 +32,13 @@ public class TodoProcessService {
         return "Item <" + todoItem.index() + "> " + action;
     }
 
-    public String doneTask(int i) {
+    public String doneTask(int taskIndex) {
         try {
-            String fileContent = fileOperation.readFromFile();
-            List<TodoItem> todoItems = fileOperation.parseTodoFileTodoItem(fileContent);
+            List<TodoItem> todoItems = todoFile.readTodoItems();
             for (TodoItem todoItem : todoItems) {
                 int index = todoItem.index();
-                if (index == i) {
-                    todoItem.done();
+                if (index == taskIndex) {
+                    todoFile.doneTask(taskIndex);
                     return this.report(todoItem, "done");
                 }
             }
@@ -49,41 +50,59 @@ public class TodoProcessService {
     }
 
     public String listAllTaskNotDone() throws IOException {
-        String message = fileOperation.readFromFile();
-        List<TodoItem> todoItems = fileOperation.parseTodoFileTodoItem(message);
+        List<TodoItem> todoItems = todoFile.readTodoItems();
         List<TodoItem> collect = todoItems.stream().filter(todoItem -> !todoItem.doneState()).collect(Collectors.toList());
         return this.formatDoingTask(collect);
     }
 
+
     private String formatDoingTask(List<TodoItem> collect) {
         StringBuilder messageBuilder = new StringBuilder();
-        collect.forEach(todoItem -> messageBuilder.append(todoItem.index()).append(".").append(" ").append(todoItem.userDate()).append(System.lineSeparator())
-                .append(System.lineSeparator()).append("Total:").append(collect.size()).append("  ").append("items"));
-        System.out.println(messageBuilder.toString());
+        collect.forEach(todoItem -> messageBuilder.append(todoItem.index()).append(".").append(" ").append(todoItem.userDate()).append(System.lineSeparator()));
+        messageBuilder.append(System.lineSeparator()).append("Total:").append(collect.size()).append("  ").append("items");
         return messageBuilder.toString();
 
     }
 
     public String formatAllTaskInfo(List<TodoItem> collect) {
-        StringBuilder  taskInfoBuilder =  new StringBuilder();
+        StringBuilder taskInfoBuilder = new StringBuilder();
         int doneNum = 0;
         for (TodoItem todoItem : collect) {
             if (!todoItem.doneState()) {
                 taskInfoBuilder.append(todoItem.index()).append(".").append(todoItem.userDate()).append(System.lineSeparator());
-            }else{
+            } else {
                 taskInfoBuilder.append(todoItem.index()).append(".").append("[Done]").append(todoItem.userDate()).append(System.lineSeparator());
                 doneNum++;
             }
         }
         taskInfoBuilder.append("Total: ").append(collect.size()).append(" ,").append(doneNum).append(" item done");
-        System.out.println(taskInfoBuilder.toString());
         return taskInfoBuilder.toString();
     }
 
     public String listAllTask() throws IOException {
-        String message = fileOperation.readFromFile();
-        List<TodoItem> todoItems = fileOperation.parseTodoFileTodoItem(message);
+        List<TodoItem> todoItems = todoFile.readTodoItems();
         return this.formatAllTaskInfo(todoItems);
 
+    }
+
+    public String process(String userInput) throws IOException {
+        CommandLine commandLine = new CommandLine(userInput);
+        String operation = commandLine.operation();
+        if ("add".equals(operation)) {
+            return this.save(new TodoItem(commandLine.operation(), commandLine.todoContent(), todoFile.getLastIndex()));
+        }
+        if ("done".equals(operation)) {
+            return this.doneTask(Integer.parseInt(commandLine.todoContent()));
+        }
+        if ("list".equals(operation)) {
+            if (StringUtils.isNotBlank(commandLine.todoContent())) {
+                return this.listAllTask();
+            }
+            return this.listAllTaskNotDone();
+        }
+        if ("exit".equals(operation)) {
+            System.exit(0);
+        }
+        return "command not execute";
     }
 }

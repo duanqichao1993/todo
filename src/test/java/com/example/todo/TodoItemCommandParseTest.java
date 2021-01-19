@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+/**
+ * command line parse test
+ */
 public class TodoItemCommandParseTest {
 
     @Test
@@ -26,8 +29,8 @@ public class TodoItemCommandParseTest {
     }
 
     @Test
-    @DisplayName("should parse todo date ")
-    public void should_parse_todo_date() {
+    @DisplayName("should parse todo data ")
+    public void should_parse_todo_data() {
         String addCommand = "todo add go home";
         CommandLine commandLine = buildCommandLine(addCommand);
         String todoContent = commandLine.todoContent();

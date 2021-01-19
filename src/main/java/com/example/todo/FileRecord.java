@@ -16,11 +16,12 @@ import java.util.List;
 
 public class FileRecord {
 
-    private final File file = new File("todo.txt");
+    private final File file;
     private final List<TodoItem> todoItems = new ArrayList<>();
-    private final  static int FIRST_INDEX = 1 ;
+    private final static int FIRST_INDEX = 1;
 
-    public FileRecord() {
+    public FileRecord(String path) {
+        file = new File(path);
         if (!file.exists()) {
             try {
                 Files.touch(file);
@@ -41,18 +42,21 @@ public class FileRecord {
     }
 
     public int getLastIndex() throws IOException {
-
         String content = this.readFromFile();
         if (StringUtils.isBlank(content)) {
             return FIRST_INDEX;
-        } else {
-            ObjectMapper objectMapper = new ObjectMapper();
-            List<TodoItem> todoItems = getTodoItems(content, objectMapper);
-            return todoItems.get(todoItems.size() - 1).index();
         }
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<TodoItem> todoItems = parseTodoFileTodoItem(content, objectMapper);
+        return nextItemIndex(todoItems);
+
     }
 
-    private List<TodoItem> getTodoItems(String content, ObjectMapper objectMapper)
+    private int nextItemIndex(List<TodoItem> todoItems) {
+        return todoItems.get(todoItems.size() - 1).index() + 1;
+    }
+
+    private List<TodoItem> parseTodoFileTodoItem(String content, ObjectMapper objectMapper)
             throws com.fasterxml.jackson.core.JsonProcessingException {
         return objectMapper.readValue(content, new TypeReference<List<TodoItem>>() {
         });

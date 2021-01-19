@@ -2,6 +2,7 @@ package com.example.todo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 public class TodoItem {
     @JsonProperty
@@ -15,10 +16,11 @@ public class TodoItem {
     private int index ;
 
     @JsonCreator
-    public TodoItem(String operation, String todoData, int index) {
+    public TodoItem(@JsonProperty("operation") String operation, @JsonProperty("todoData") String todoData, @JsonProperty("index") int index) {
         this.operation = operation;
         this.todoData = todoData;
         this.doneState = false;
+        this.index = index;
     }
 
 

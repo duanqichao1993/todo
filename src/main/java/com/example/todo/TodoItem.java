@@ -36,10 +36,14 @@ public class TodoItem {
         this.doneState = true;
     }
 
+
     public int  index() {
         return this.index;
     }
 
+    public boolean doneState() {
+        return  this.doneState;
+    }
 
 
 

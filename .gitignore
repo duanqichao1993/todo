@@ -111,8 +111,8 @@ fabric.properties
 .gradle/6.7/vcsMetadata-1/
 .idea/.name
 build/generated/
-build/reports/tests/test/classes/com.example.todo.FileRecordTest.html
-build/test-results/test/TEST-com.example.todo.FileRecordTest.xml
+build/reports/tests/test/classes/com.example.todo.FileOperationTest.html
+build/test-results/test/TEST-com.example.todo.FileOperationTest.xml
 build/classes/
 build/libs/
 build/reports/tests/test/css/

@@ -7,16 +7,19 @@ import org.junit.jupiter.api.Test;
 /**
  * command line valid test
  */
-public class TodoItemCommandLengthValidTest {
+public class CommandLineTest {
 
     @Test
-    @DisplayName("should receive user input")
-    public void should_receive_user_input() {
+    @DisplayName("should parse add command")
+    public void should_parse_add_command() {
         String commandLine = "todo add  toSwim ";
         CommandLine userInput = new CommandLine(commandLine);
-        boolean valid = userInput.verify();
-        Assertions.assertTrue(valid);
+        Assertions.assertEquals("add",userInput.operation());
+        Assertions.assertEquals("toSwim",userInput.todoContent());
     }
+
+
+
 
 
 
